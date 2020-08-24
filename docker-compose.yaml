@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  sudo-metrics:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      args:
+        hmm: 1
+    ports:
+      - "8000:8000"        
+    
