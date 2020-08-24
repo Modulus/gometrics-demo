@@ -52,7 +52,7 @@ func main() {
 	r.HandleFunc("/vote/{category}", VoteHandler)
 	log.Println("Server running on 0.0.0.0:8000")
 
-	http.Handle("/metrics", promhttp.Handler())
+	r.Path("/metrics").Handler(promhttp.Handler())
 
 	http.ListenAndServe(":8000", r)
 }
