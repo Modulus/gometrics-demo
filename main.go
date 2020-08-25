@@ -1,9 +1,13 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -47,12 +51,51 @@ func RootHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	r := mux.NewRouter()
-	r.HandleFunc("/", RootHandler)
-	r.HandleFunc("/vote/{category}", VoteHandler)
+	mainRouter := mux.NewRouter()
+	mainRouter.HandleFunc("/", RootHandler).Methods("GET")
+	mainRouter.HandleFunc("/vote/{category}", VoteHandler).Methods("GET")
 	log.Println("Server running on 0.0.0.0:8000")
 
-	r.Path("/metrics").Handler(promhttp.Handler())
+	mainHttp := &http.Server{Addr: ":8000", Handler: mainRouter}
 
-	http.ListenAndServe(":8000", r)
+	metricsRouter := mux.NewRouter()
+	metricsRouter.Path("/metrics").Handler(promhttp.Handler())
+	metricsHttp := &http.Server{Addr: ":2112", Handler: metricsRouter}
+
+	go func() {
+		log.Println("Server running on 0.0.0.0:8000")
+		if err := mainHttp.ListenAndServe(); err != nil {
+			if err == http.ErrServerClosed {
+				log.Println("Main HTTP server closed")
+			} else {
+				log.Panic("Could not start ai-api-gateway http server", err)
+			}
+		}
+	}()
+
+	go func() {
+		log.Println("Metrics Server running on 0.0.0.0:2112")
+		if err := metricsHttp.ListenAndServe(); err != nil {
+			if err == http.ErrServerClosed {
+				log.Println("Metrics HTTP server closed")
+			} else {
+				log.Panic("Could not start ai-api-gateway http server", err)
+			}
+		}
+	}()
+
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
+
+	<-stop
+
+	log.Println("Shutting down the Gateway server...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	mainHttp.Shutdown(ctx)
+	metricsHttp.Shutdown(ctx)
+
+	log.Println("App exiting")
+
 }
