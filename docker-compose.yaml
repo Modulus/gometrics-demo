@@ -1,11 +1,19 @@
 version: "3.8"
 services:
-  sudo-metrics:
+  app:
     build: 
       context: .
       dockerfile: Dockerfile
       args:
         hmm: 1
     ports:
-      - "8000:8000"        
+      - "8000:8000" 
+      - "2112:2112"       
+  locust:
+    build:
+      context: locust
+      dockerfile: Dockerfile
+    environment:
+      HOST: "http://app:8000"      
+
     

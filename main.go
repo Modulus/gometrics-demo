@@ -11,8 +11,48 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
+
+var (
+	// prometheusRegistry = prometheus.NewRegistry()
+
+	rootCallsProcessed = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "root_calls_total",
+		Help: "The total number of votes",
+	})
+
+	votesProsessed = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "votes_total",
+		Help: "The total number of votes",
+	})
+
+	greenVotesProsessed = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "green_votes_total",
+		Help: "The total number of votes",
+	})
+
+	yellowVotesProsessed = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "yellow_votes_total",
+		Help: "The total number of votes",
+	})
+
+	redVotesProsessed = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "red_votes_total",
+		Help: "The total number of votes",
+	})
+)
+
+// func initPrometheus() {
+// 	log.Println("PromethusRegistry initalizing started!")
+// 	prometheusRegistry.MustRegister(votesProsessed)
+// 	prometheusRegistry.MustRegister(greenVotesProsessed)
+// 	prometheusRegistry.MustRegister(yellowVotesProsessed)
+// 	prometheusRegistry.MustRegister(redVotesProsessed)
+// 	log.Println("PromethusRegistry initalizing finished!")
+// }
 
 type Data struct {
 	TimeStamp string
@@ -24,6 +64,18 @@ func VoteHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	category := vars["category"]
 	log.Println("You voted for " + category)
+
+	if category == "green" {
+		votesProsessed.Inc()
+		greenVotesProsessed.Inc()
+	} else if category == "yellow" {
+		votesProsessed.Inc()
+		yellowVotesProsessed.Inc()
+	} else if category == "red" {
+		votesProsessed.Inc()
+		redVotesProsessed.Inc()
+	}
+
 	currentTime := time.Now().Format("2006-01-02 15:04:05")
 	data := Data{currentTime, "You voted for", category}
 	js, err := json.Marshal(data)
@@ -40,6 +92,7 @@ func VoteHandler(w http.ResponseWriter, r *http.Request) {
 func RootHandler(w http.ResponseWriter, r *http.Request) {
 	currentTime := time.Now().Format("2006-01-02 15:04:05")
 	data := Data{currentTime, "First post", "This is the first post"}
+	rootCallsProcessed.Inc()
 	js, err := json.Marshal(data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -51,6 +104,10 @@ func RootHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+
+	log.Println("Initializing promethusRegistry")
+	// initPrometheus()
+
 	mainRouter := mux.NewRouter()
 	mainRouter.HandleFunc("/", RootHandler).Methods("GET")
 	mainRouter.HandleFunc("/vote/{category}", VoteHandler).Methods("GET")
