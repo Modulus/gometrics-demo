@@ -17,8 +17,6 @@ import (
 )
 
 var (
-	// prometheusRegistry = prometheus.NewRegistry()
-
 	rootCallsProcessed = promauto.NewCounter(prometheus.CounterOpts{
 		Name: "root_calls_total",
 		Help: "The total number of votes",
@@ -44,15 +42,6 @@ var (
 		Help: "The total number of votes",
 	})
 )
-
-// func initPrometheus() {
-// 	log.Println("PromethusRegistry initalizing started!")
-// 	prometheusRegistry.MustRegister(votesProsessed)
-// 	prometheusRegistry.MustRegister(greenVotesProsessed)
-// 	prometheusRegistry.MustRegister(yellowVotesProsessed)
-// 	prometheusRegistry.MustRegister(redVotesProsessed)
-// 	log.Println("PromethusRegistry initalizing finished!")
-// }
 
 type Data struct {
 	TimeStamp string
