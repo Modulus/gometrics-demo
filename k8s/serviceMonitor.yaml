@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: go-metrics-service-monitor
+  namespace: monitoring
+  labels:
+    k8s-app: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: metrics-demo
+  endpoints:
+    - port: metrics
+      interval: 30s
