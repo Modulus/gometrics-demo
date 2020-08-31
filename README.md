@@ -5,3 +5,8 @@
 # Run locally
 docker-comopse up 
 
+# Build your own
+
+docker build -t yourrepo/metrics-demo .
+
+docker build -t yourrepo/metrics-locust ./locust
