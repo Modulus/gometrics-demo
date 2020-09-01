@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: grafana
+  name: grafana
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - name: grafana
+        volumeMounts:
+        - mountPath: /grafana-dashboard-definitions/0/grafana-dashboard-go-metrics-demo
+          name: grafana-dashboard-go-metrics-demo
+          readOnly: false
+      serviceAccountName: grafana
+      volumes:
+      - configMap:
+          name: grafana-dashboard-go-metrics-demo
+        name: grafana-dashboard-go-metrics-demo          

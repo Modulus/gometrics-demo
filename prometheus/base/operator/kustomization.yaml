@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- release-0.4/manifests/setup/0namespace-namespace.yaml
+- release-0.4/manifests/setup/prometheus-operator-0alertmanagerCustomResourceDefinition.yaml
+- release-0.4/manifests/setup/prometheus-operator-0podmonitorCustomResourceDefinition.yaml
+- release-0.4/manifests/setup/prometheus-operator-0prometheusCustomResourceDefinition.yaml
+- release-0.4/manifests/setup/prometheus-operator-0prometheusruleCustomResourceDefinition.yaml
+- release-0.4/manifests/setup/prometheus-operator-0servicemonitorCustomResourceDefinition.yaml
+- release-0.4/manifests/setup/prometheus-operator-clusterRoleBinding.yaml
+- release-0.4/manifests/setup/prometheus-operator-clusterRole.yaml
+- release-0.4/manifests/setup/prometheus-operator-deployment.yaml
+- release-0.4/manifests/setup/prometheus-operator-serviceAccount.yaml
+- release-0.4/manifests/setup/prometheus-operator-service.yaml
+
