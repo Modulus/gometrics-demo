@@ -6,6 +6,10 @@ metadata:
   labels:
     k8s-app: prometheus
 spec:
+  namespaceSelector:
+    matchNames:
+      - default
+      - demo
   selector:
     matchLabels:
       app: metrics-demo
