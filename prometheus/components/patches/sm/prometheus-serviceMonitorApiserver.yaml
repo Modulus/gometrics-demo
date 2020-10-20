@@ -2,15 +2,8 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   labels:
-    k8s-app: prometheus
+    k8s-app: apiserver
     prometheus: k8s
     role: service-monitor       
-  name: prometheus
+  name: kube-apiserver
   namespace: monitoring
-spec:
-  endpoints:
-  - interval: 30s
-    port: web
-  selector:
-    matchLabels:
-      prometheus: k8s

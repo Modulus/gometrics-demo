@@ -6,10 +6,3 @@ metadata:
   labels:
     prometheus: k8s
     role: service-monitor  
-spec:
-  endpoints:
-  - interval: 15s
-    port: http
-  selector:
-    matchLabels:
-      app: grafana

@@ -1,11 +1,24 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+commonLabels:
+  prometheus: k8s
 bases:
   - ../base/components
 resources:
   - dashboards/grafana-dashboardDefinitions.yaml
-  # - resources/prometheus-rules.yaml
+  # - resources/prometheus-rules.yaml # Removed for the purpose of defining this in custom namespaces
 patchesStrategicMerge:
   - patches/prometheus-clusterRole.yaml  
   - patches/grafana-deployment.yaml
-  - patches/prometheus-prometheus-names.yaml  
+  - patches/prometheus-prometheus.yaml  
+  # - patches/sm/alertmanager-serviceMonitor.yaml
+  # - patches/sm/grafana-serviceMonitor.yaml
+  # - patches/sm/kube-state-metrics-serviceMonitor.yaml
+  # - patches/sm/node-exporter-serviceMonitor.yaml
+  # - patches/sm/prometheus-operator-serviceMonitor.yaml        
+  # - patches/sm/prometheus-serviceMonitor.yaml
+  # - patches/sm/prometheus-serviceMonitorApiserver.yaml
+  # - patches/sm/prometheus-serviceMonitorCoreDNS.yaml
+  # - patches/sm/prometheus-serviceMonitorKubeControllerManager.yaml
+  # - patches/sm/prometheus-serviceMonitorKubelet.yaml
+  # - patches/sm/prometheus-serviceMonitorKubeScheduler.yaml   

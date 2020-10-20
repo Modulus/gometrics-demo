@@ -28,7 +28,7 @@ spec:
   ruleSelector:
     matchLabels:
       prometheus: k8s
-      role: alert-rules
+      # role: alert-rules
   serviceAccountName: prometheus-k8s
   serviceMonitorNamespaceSelector: 
     matchLabels:
@@ -36,4 +36,3 @@ spec:
   serviceMonitorSelector: 
     matchLabels:
       prometheus: k8s
-      role: service-monitor

@@ -2,9 +2,11 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: go-metrics-service-monitor
-  namespace: monitoring
+  namespace: demo #monitoring
   labels:
     k8s-app: prometheus
+    prometheus: k8s
+    role: service-monitor
 spec:
   namespaceSelector:
     matchNames:

@@ -1,0 +1,9 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: prometheus
+    prometheus: k8s
+    role: service-monitor       
+  name: prometheus
+  namespace: monitoring
