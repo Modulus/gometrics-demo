@@ -4,6 +4,8 @@ bases:
   - ../base/components
 resources:
   - dashboards/grafana-dashboardDefinitions.yaml
+  # - resources/prometheus-rules.yaml
 patchesStrategicMerge:
   - patches/prometheus-clusterRole.yaml  
   - patches/grafana-deployment.yaml
+  - patches/prometheus-prometheus-names.yaml  

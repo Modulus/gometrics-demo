@@ -1,0 +1,48 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: k8s
+    role: alert-rules
+  name: prometheus-k8s-rules-jenkins
+  namespace: monitoring
+spec:
+  groups:
+  - name: vote.rules
+    rules:
+      - alert: MissingVotesTotal
+        annotations:
+          message: |
+            Total votes for deployment {{$labels.job}} in namespace and pod {{$labels.pod}} {{$labels.namespace}} reports votes_total == 0.
+        expr: votes_total == 0
+        for: 1m
+        labels:
+          severity: critical
+          app: votes
+      - alert: MissingGreenVotes
+        annotations:
+          message: |
+            Missing green votes for {{$labels.job}} pod {{$labels.pod}} is missing {{$value}} plugin updates
+        expr: green_votes_total == 0
+        for: 1m
+        labels:
+          severity:  critical        
+          app: votes          
+      - alert: MissingRedVotes
+        annotations:
+          message: |
+            Red votes for  {{$labels.job}}  in namespace {{$labels.namespace}} has {{$value}} blocked items in queue 
+        expr: red_votes_total == 0
+        for: 1m
+        labels:
+          severity: critical
+          app: votes          
+      - alert: Yellow votes missing
+        annotations:
+          message: |
+            Yellow votes for {{$labels.job}} in namespace {{$labels.namespace}} has {{$value}} blocked items in queue 
+        expr: yellow_votes_total == 0
+        for: 1m
+        labels:
+          severity: critical          
+          app: votes
