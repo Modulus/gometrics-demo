@@ -25,14 +25,14 @@ spec:
     requests:
       cpu: "2"
       memory: 400Mi #TODO: Sett denne til 20Gi for ai clusteret
-  ruleSelector:
-    matchLabels:
-      prometheus: k8s
+  ruleSelector: {}
+    # matchLabels:
+    #   prometheus: k8s
       # role: alert-rules
   serviceAccountName: prometheus-k8s
-  serviceMonitorNamespaceSelector: 
-    matchLabels:
-      prometheus: k8s
-  serviceMonitorSelector: 
-    matchLabels:
-      prometheus: k8s
+  serviceMonitorNamespaceSelector: {}
+    # matchLabels:
+    #   prometheus: k8s
+  serviceMonitorSelector: {}
+    # matchLabels:
+    #   prometheus: k8s
