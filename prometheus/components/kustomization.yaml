@@ -2,14 +2,19 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 # commonLabels:
 #   prometheus: k8s
+namespace: monitoring #this nees to be set, otherwise config may end up in current active namespace
 bases:
   - ../base/components
-resources:
-  - dashboards/grafana-dashboardDefinitions.yaml
+configMapGenerator:
+  - name: grafana-dashboard-go-metrics-demo
+    files:
+      - dashboards/go-metrics-demo.json
+# resources:
+#   - dashboards/grafana-dashboardDefinitions.yaml
   # TODO: This is defined in the demo namespace is this setup  
   # - resources/prometheus-rules.yaml # Removed for the purpose of defining this in custom namespaces
 patchesStrategicMerge:
   - patches/prometheus-clusterRole.yaml  
   - patches/grafana-deployment.yaml
   # TODO: Remove this if you want to read rules without namespace label
-  - patches/prometheus-prometheus.yaml  
+  - patches/prometheus-prometheus.yaml
