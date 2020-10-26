@@ -1,9 +1,0 @@
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  labels:
-    k8s-app: kube-scheduler
-    prometheus: k8s
-    role: service-monitor       
-  name: kube-scheduler
-  namespace: monitoring

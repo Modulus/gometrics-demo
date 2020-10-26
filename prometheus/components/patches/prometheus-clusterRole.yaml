@@ -12,6 +12,7 @@ rules:
   - services
   - endpoints
   - pods
+  - namespaces
   # - namespaces # TODO: Test with this in cross namespace communication
   verbs: ["get", "list", "watch"]
 - apiGroups: [""]

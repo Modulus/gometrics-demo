@@ -5,7 +5,7 @@ metadata:
     prometheus: k8s
     role: alert-rules
   name: prometheus-k8s-rules-jenkins
-  namespace: monitoring # demo
+  namespace: demo # demo
 spec:
   groups:
   - name: vote.rules

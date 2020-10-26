@@ -1,9 +1,0 @@
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  labels:
-    k8s-app: alertmanager
-    prometheus: k8s
-    role: service-monitor
-  name: alertmanager
-  namespace: monitoring

@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prometheus-oper-istio-mesh
+  labels:
+    release: prometheus
+spec:
+  jobLabel: istio
+  selector:
+    matchExpressions:
+      - {key: istio, operator: In, values: [mixer,pilot,galley,citadel,sidecar-injector]}
+  namespaceSelector:
+    any: true
+  endpoints:
+  - port: prometheus
+    interval: 15s

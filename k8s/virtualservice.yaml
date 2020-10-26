@@ -1,0 +1,15 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: istio-ingress
+  namespace: demo
+spec:
+  hosts:
+  - "metrics-demo.example.com"
+  gateways:
+  - gateway.istio-system.svc.cluster.local
+  http:
+  - timeout: 30000ms
+    route:
+    - destination:
+        host: metrics-demo
