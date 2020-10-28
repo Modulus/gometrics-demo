@@ -23,9 +23,9 @@ spec:
     # version: 'v0.7.0'
   podMonitorNamespaceSelector: {}
   podMonitorSelector: {}
-  ruleNamespaceSelector: 
-    matchLabels:
-      prometheus: k8s
+  # ruleNamespaceSelector: 
+  #   matchLabels:
+  #     prometheus: k8s
   replicas: 2
   resources:
     requests:
