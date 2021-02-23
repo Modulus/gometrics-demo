@@ -4,7 +4,7 @@ kind: Kustomization
 #   prometheus: k8s
 namespace: monitoring #this nees to be set, otherwise config may end up in current active namespace
 bases:
-  - ../base/components
+  - https://github.com/prometheus-operator/kube-prometheus.git?ref=release-0.4
 configMapGenerator:
   - name: grafana-dashboard-go-metrics-demo
     files:
