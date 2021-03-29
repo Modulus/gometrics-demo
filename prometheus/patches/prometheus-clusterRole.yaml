@@ -17,12 +17,13 @@ rules:
   verbs: ["get", "list", "watch"]
 - apiGroups: [""]
   resources:
-  - configmaps
+  - configmap
   verbs: ["get"]
 - nonResourceURLs: ["/metrics"]
   verbs: ["get"]
 
 ---
+
 # Orginal looked like this
 # apiVersion: rbac.authorization.k8s.io/v1
 # kind: ClusterRole

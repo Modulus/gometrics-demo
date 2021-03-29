@@ -49,6 +49,11 @@ type Data struct {
 	Message   string
 }
 
+type VersionInfo struct {
+	Version string
+	TimeStamp string	
+}
+
 func VoteHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	category := vars["category"]
@@ -92,6 +97,23 @@ func RootHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(js)
 }
 
+func VersionHandler(w http.ResponseWriter, r *http.Request){
+	currentTime := time.Now().Format("2006-01-02 15:04:05")
+	version := "1.0"
+
+	versionInfo := VersionInfo{version, currentTime}
+	js, err := json.Marshal(versionInfo)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Server", "Ein slek der Mix Master")
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
+
+}
+
 func main() {
 
 	log.Println("Initializing promethusRegistry")
@@ -100,6 +122,7 @@ func main() {
 	mainRouter := mux.NewRouter()
 	mainRouter.HandleFunc("/", RootHandler).Methods("GET")
 	mainRouter.HandleFunc("/vote/{category}", VoteHandler).Methods("GET")
+	mainRouter.HandleFunc("/version", VersionHandler).Methods("GET")
 	log.Println("Server running on 0.0.0.0:8000")
 
 	mainHttp := &http.Server{Addr: ":8000", Handler: mainRouter}

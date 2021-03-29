@@ -1,0 +1,19 @@
+apiVersion: rbac.authorization.k8s.io/v1
+# This role binding allows "prometheus-adapter" to read authentication config in the "kube-system" namespace.
+# kube-prometheus fails without this binding in k8s kind
+kind: RoleBinding
+metadata:
+  name: prometheus-adapter-extension-apiserver-authentication-reader-binding
+  namespace: monitoring
+subjects:
+- kind: ServiceAccount
+  name: prometheus-adapter 
+  namespace: monitoring
+roleRef:
+  kind: Role
+  name: extension-apiserver-authentication-reader 
+  apiGroup: rbac.authorization.k8s.io
+
+# Create manually
+# kubectl create rolebinding -n kube-system prometheus-adapter-extension-apiserver-authentication-reader-binding --role=extension-apiserver-authentication-reader --serviceaccount=monitoring:prometheus-adapter
+
