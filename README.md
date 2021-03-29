@@ -31,3 +31,6 @@ kubectl annotate ingress example-ingress kubernetes.io/ingress.class=ambassador
 
 ## Kube-prometheus
 kubectl apply -k ./prometheus
+
+### Metrics
+http_request_duration_milliseconds{namespace="monitoring", service="grafana"}

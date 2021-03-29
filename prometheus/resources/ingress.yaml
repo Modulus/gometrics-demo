@@ -16,6 +16,13 @@ spec:
             service: 
               name: prometheus-k8s
               port: 
+                number: 9090        
+        - path: /prometheus/*
+          pathType: Prefix
+          backend:
+            service: 
+              name: prometheus-k8s
+              port: 
                 number: 9090
         - path: /
           pathType: Prefix
