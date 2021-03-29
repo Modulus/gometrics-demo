@@ -10,7 +10,8 @@ configMapGenerator:
     namespace: monitoring
     files:
       - dashboards/go-metrics-demo.json
-# resources:
+resources:
+  - resources/ingress.yaml
 #   - resources/prometheus-adapter.yaml
 #   - dashboards/grafana-dashboardDefinitions.yaml
   # TODO: This is defined in the demo namespace is this setup  
