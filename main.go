@@ -1,13 +1,13 @@
 package main
 
 import (
-	"context"
+	// "context"
 	"encoding/json"
 	"log"
 	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
+	// "os"
+	// "os/signal"
+	// "syscall"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -57,7 +57,10 @@ type VersionInfo struct {
 func VoteHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	category := vars["category"]
-	log.Println("You voted for " + category)
+	// log.Println("You voted for " + category)
+	http.Error(w, "Nerfed application", http.StatusInternalServerError)
+	log.Println("Failed, the application is nerfed!")
+	return 
 
 	if category == "green" {
 		votesProsessed.Inc()
@@ -114,57 +117,24 @@ func VersionHandler(w http.ResponseWriter, r *http.Request){
 
 }
 
+
+  
+
 func main() {
 
 	log.Println("Initializing promethusRegistry")
-	// initPrometheus()
 
 	mainRouter := mux.NewRouter()
-	mainRouter.HandleFunc("/", RootHandler).Methods("GET")
-	mainRouter.HandleFunc("/vote/{category}", VoteHandler).Methods("GET")
-	mainRouter.HandleFunc("/version", VersionHandler).Methods("GET")
+
+
+	mainRouter.HandleFunc("/", RootHandler)
+	mainRouter.HandleFunc("/vote/{category}", VoteHandler)
+	mainRouter.HandleFunc("/version", VersionHandler)
+
+	mainRouter.Path("/metrics").Handler(promhttp.Handler())
+
+
 	log.Println("Server running on 0.0.0.0:8000")
 
-	mainHttp := &http.Server{Addr: ":8000", Handler: mainRouter}
-
-	metricsRouter := mux.NewRouter()
-	metricsRouter.Path("/metrics").Handler(promhttp.Handler())
-	metricsHttp := &http.Server{Addr: ":2112", Handler: metricsRouter}
-
-	go func() {
-		log.Println("Server running on 0.0.0.0:8000")
-		if err := mainHttp.ListenAndServe(); err != nil {
-			if err == http.ErrServerClosed {
-				log.Println("Main HTTP server closed")
-			} else {
-				log.Panic("Could not start ai-api-gateway http server", err)
-			}
-		}
-	}()
-
-	go func() {
-		log.Println("Metrics Server running on 0.0.0.0:2112")
-		if err := metricsHttp.ListenAndServe(); err != nil {
-			if err == http.ErrServerClosed {
-				log.Println("Metrics HTTP server closed")
-			} else {
-				log.Panic("Could not start ai-api-gateway http server", err)
-			}
-		}
-	}()
-
-	stop := make(chan os.Signal, 1)
-	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
-
-	<-stop
-
-	log.Println("Shutting down the Gateway server...")
-
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-	defer cancel()
-	mainHttp.Shutdown(ctx)
-	metricsHttp.Shutdown(ctx)
-
-	log.Println("App exiting")
-
+	http.ListenAndServe(":8000", mainRouter)
 }

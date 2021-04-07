@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: metrics-demo
+  namespace: demo
 spec:
   selector:
     matchLabels:
@@ -14,7 +15,7 @@ spec:
     spec:
       containers:
       - name: metrics-demo
-        image: coderpews/metrics-demo:1.0
+        image: coderpews/metrics-demo:1.1-nerfed #broken/nerfed/1.1-nerfed
         resources:
           limits:
             memory: "128Mi"
@@ -22,13 +23,12 @@ spec:
         ports:
         - name: web
           containerPort: 8000
-        - name: metrics
-          containerPort: 2112
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: metrics-demo
+  namespace: demo
   labels:
     app: metrics-demo
 spec:
@@ -38,14 +38,12 @@ spec:
   - port: 8000
     name: web
     targetPort: 8000
-  - port: 2112
-    name: metrics
-    targetPort: 2112
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: metrics-locust
+  namespace: demo
 spec:
   selector:
     matchLabels:

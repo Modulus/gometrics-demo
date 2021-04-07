@@ -12,6 +12,7 @@ configMapGenerator:
       - dashboards/go-metrics-demo.json
 resources:
   - resources/ingress.yaml
+  - resources/nginx/podMonitor.yaml
 #   - resources/prometheus-adapter.yaml
 #   - dashboards/grafana-dashboardDefinitions.yaml
   # TODO: This is defined in the demo namespace is this setup  

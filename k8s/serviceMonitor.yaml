@@ -16,5 +16,5 @@ spec:
     matchLabels:
       app: metrics-demo
   endpoints:
-    - port: metrics
+    - port: web
       interval: 30s

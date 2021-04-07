@@ -21,6 +21,14 @@ kubectl wait --namespace ingress-nginx \
   --selector=app.kubernetes.io/component=controller \
   --timeout=90s
 
+
+## Nginx ingress controller with helm
+helm repo add nginx-stable https://helm.nginx.com/stable
+helm repo update
+helm install -n ingress-nginx  --set controller.enableLatencyMetrics=true ingress-ctrl nginx-stable/nginx-ingress
+
+
+
 ## Ambassador
 kubectl apply -f https://github.com/datawire/ambassador-operator/releases/latest/download/ambassador-operator-crds.yaml
 kubectl apply -n ambassador -f https://github.com/datawire/ambassador-operator/releases/latest/download/ambassador-operator-kind.yaml
@@ -34,3 +42,8 @@ kubectl apply -k ./prometheus
 
 ### Metrics
 http_request_duration_milliseconds{namespace="monitoring", service="grafana"}
+
+
+## Argocd
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
